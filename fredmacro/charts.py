@@ -35,22 +35,48 @@ def recession_periods(start: str = "1948-01-01") -> list[tuple[pd.Timestamp, pd.
     return spans
 
 
-def _label_last_point(ax, series: pd.Series, label: str, colour: str) -> None:
-    """Write the series name and latest value at the right end of the line."""
-    x, y = series.index[-1], series.iloc[-1]
-    ax.annotate(
-        f"{label}\n{y:,.1f}",
-        xy=(x, y),
-        xytext=(8, 0),
-        textcoords="offset points",
-        va="center",
-        ha="left",
-        fontsize=10,
-        color=colour,
-        fontweight="semibold",
-        linespacing=1.4,
+def _place_end_labels(ax, entries: list[tuple[str, pd.Series, str]]) -> None:
+    """Draw the marker + label at the end of each line, nudging labels apart
+    vertically when two series finish close together so text never overlaps.
+    """
+    if not entries:
+        return
+
+    ymin, ymax = ax.get_ylim()
+    # Minimum vertical gap between label centres, in data units. ~9% of the
+    # visible range reads as "two separate rows of text" without excess space.
+    min_gap = (ymax - ymin) * 0.09
+
+    x_last = max(s.index[-1] for _, s, _ in entries)
+    items = sorted(
+        [{"label": label, "y": s.iloc[-1], "colour": colour} for label, s, colour in entries],
+        key=lambda d: d["y"],
     )
-    ax.plot([x], [y], marker="o", markersize=4.5, color=colour, zorder=5)
+    for item in items:
+        item["y_label"] = item["y"]
+    for i in range(1, len(items)):
+        floor = items[i - 1]["y_label"] + min_gap
+        if items[i]["y_label"] < floor:
+            items[i]["y_label"] = floor
+
+    for item in items:
+        colour, y_true, y_label = item["colour"], item["y"], item["y_label"]
+        ax.plot([x_last], [y_true], marker="o", markersize=4.5, color=colour, zorder=5)
+        # xy is the true data point; xytext is the (possibly nudged) label
+        # position, both in data coordinates, plus a small fixed pixel offset
+        # to the right so the text doesn't sit on top of the axis line.
+        ax.annotate(
+            f"{item['label']}\n{y_true:,.1f}",
+            xy=(x_last, y_true),
+            xytext=(x_last, y_label),
+            textcoords="data",
+            va="center",
+            ha="left",
+            fontsize=10,
+            color=colour,
+            fontweight="semibold",
+            linespacing=1.4,
+        )
 
 
 def line_chart(
@@ -86,16 +112,21 @@ def line_chart(
                         xytext=(0, 5), textcoords="offset points",
                         fontsize=9, color=MUTED)
 
+    label_entries = []
     for i, (label, s) in enumerate(series.items()):
         colour = PALETTE[i % len(PALETTE)]
         ax.plot(s.index, s.values, color=colour, zorder=3,
-                linewidth=2.2 if i == 0 else 1.8)
-        _label_last_point(ax, s, label, colour)
+                linewidth=1.6 if i == 0 else 1.3)
+        label_entries.append((label, s, colour))
 
     # Leave room on the right for the direct labels.
     ax.margins(x=0.02)
     xmin, xmax = ax.get_xlim()
     ax.set_xlim(xmin, xmax + (xmax - xmin) * 0.16)
+
+    # Labels are placed after xlim/ylim are finalised, so the collision-check
+    # math and the x-position of the label both line up with what's drawn.
+    _place_end_labels(ax, label_entries)
 
     ax.xaxis.set_major_locator(mdates.AutoDateLocator(minticks=5, maxticks=9))
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
