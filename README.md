@@ -144,7 +144,7 @@ payrolls get revised, and the diff on those CSVs is a free record of it.
 ## Charts
 
 <!-- CHARTS:START -->
-_Last rebuilt 28 July 2026, 13:03 UTC._
+_Last rebuilt 28 July 2026, 13:18 UTC._
 
 ### US inflation, measured two ways
 `Headline CPI` — latest **3.7** (Jun 2026)
