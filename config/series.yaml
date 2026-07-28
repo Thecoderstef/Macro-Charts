@@ -1,0 +1,61 @@
+# Every chart in the repo is defined here. To add one, copy a block and change
+# the FRED series IDs. Find IDs at https://fred.stlouisfed.org/ or from Python:
+#   python -c "from fredmacro.fred import search; print(search('core pce'))"
+
+defaults:
+  start: "1995-01-01"
+  shade_recessions: true
+
+charts:
+  - id: cpi_inflation
+    title: "US inflation, measured two ways"
+    subtitle: "Consumer price index, year-over-year % change"
+    ylabel: "% YoY"
+    transform: yoy
+    zero_line: true
+    note: "Core excludes food and energy"
+    series:
+      - {fred_id: CPIAUCSL, label: "Headline CPI"}
+      - {fred_id: CPILFESL, label: "Core CPI"}
+
+  - id: pce_inflation
+    title: "The gauge the Fed actually targets"
+    subtitle: "Personal consumption expenditures price index, year-over-year % change"
+    ylabel: "% YoY"
+    transform: yoy
+    zero_line: true
+    hline: 2.0
+    hline_label: "FOMC 2% target"
+    note: "The 2% target is defined on headline PCE, not CPI"
+    series:
+      - {fred_id: PCEPI, label: "Headline PCE"}
+      - {fred_id: PCEPILFE, label: "Core PCE"}
+
+  - id: cpi_momentum
+    title: "Recent momentum runs ahead of the annual rate"
+    subtitle: "Core CPI, year-over-year vs three-month annualised % change"
+    ylabel: "%"
+    transform: yoy
+    start: "2015-01-01"
+    zero_line: true
+    series:
+      - {fred_id: CPILFESL, label: "YoY", transform: yoy}
+      - {fred_id: CPILFESL, label: "3m annualised", transform: three_month_annualised}
+
+  - id: labour_market
+    title: "Unemployment, the slowest of the fast indicators"
+    subtitle: "Civilian unemployment rate, % of labour force"
+    ylabel: "%"
+    transform: level
+    series:
+      - {fred_id: UNRATE, label: "Unemployment rate"}
+
+  - id: policy_vs_inflation
+    title: "The policy rate against the inflation it is chasing"
+    subtitle: "Effective federal funds rate and core PCE inflation, %"
+    ylabel: "%"
+    start: "2000-01-01"
+    transform: level
+    series:
+      - {fred_id: FEDFUNDS, label: "Fed funds rate", transform: level}
+      - {fred_id: PCEPILFE, label: "Core PCE (YoY)", transform: yoy}
