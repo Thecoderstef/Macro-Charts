@@ -144,7 +144,33 @@ payrolls get revised, and the diff on those CSVs is a free record of it.
 ## Charts
 
 <!-- CHARTS:START -->
-_Run `python update.py` to populate this section._
+_Last rebuilt 28 July 2026, 13:03 UTC._
+
+### US inflation, measured two ways
+`Headline CPI` — latest **3.7** (Jun 2026)
+
+![US inflation, measured two ways](charts/cpi_inflation.png)
+
+### The gauge the Fed actually targets
+`Headline PCE` — latest **4.1** (May 2026)
+
+![The gauge the Fed actually targets](charts/pce_inflation.png)
+
+### Recent momentum runs ahead of the annual rate
+`YoY` — latest **2.8** (Jun 2026)
+
+![Recent momentum runs ahead of the annual rate](charts/cpi_momentum.png)
+
+### Unemployment, the slowest of the fast indicators
+`Unemployment rate` — latest **4.2** (Jun 2026)
+
+![Unemployment, the slowest of the fast indicators](charts/labour_market.png)
+
+### The policy rate against the inflation it is chasing
+`Fed funds rate` — latest **3.6** (Jun 2026)
+
+![The policy rate against the inflation it is chasing](charts/policy_vs_inflation.png)
+
 <!-- CHARTS:END -->
 
 ---
