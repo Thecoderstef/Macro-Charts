@@ -62,25 +62,25 @@ def apply_style() -> None:
             "axes.spines.left": False,
             "axes.grid": True,
             "axes.grid.axis": "y",
-            "axes.labelcolor": MUTED,
+            "axes.labelcolor": INK,
             "axes.labelsize": 10,
             "axes.titlesize": 15,
             "axes.titleweight": "semibold",
-            "axes.titlelocation": "left",
+            "axes.titlelocation": "center",
             "axes.prop_cycle": mpl.cycler(color=PALETTE),
             "grid.color": GRID,
             "grid.linewidth": 0.7,
             "grid.alpha": 0.9,
-            # Ticks: minimal
-            "xtick.color": MUTED,
-            "ytick.color": MUTED,
+            # Ticks: minimal, but numbers/years in black rather than grey
+            "xtick.color": INK,
+            "ytick.color": INK,
             "xtick.labelsize": 10,
             "ytick.labelsize": 10,
             "xtick.major.size": 4,
             "ytick.major.size": 0,
             "xtick.direction": "out",
             # Lines
-            "lines.linewidth": 2.0,
+            "lines.linewidth": 1.4,
             "lines.solid_capstyle": "round",
             "legend.frameon": False,
         }
@@ -88,14 +88,14 @@ def apply_style() -> None:
 
 
 def add_titles(ax, title: str, subtitle: str | None = None) -> None:
-    """Title in bold, subtitle in grey underneath — the newspaper convention."""
+    """Title in bold, subtitle in grey underneath — both centered."""
     if subtitle:
-        ax.set_title(subtitle, loc="left", fontsize=11, color=MUTED,
-                     fontweight="normal", pad=10)
-        ax.figure.suptitle(title, x=0.005, y=1.0, ha="left",
+        ax.set_title(subtitle, loc="center", fontsize=11, color=MUTED,
+                     fontweight="normal", pad=22)
+        ax.figure.suptitle(title, x=0.5, y=1.06, ha="center",
                            fontsize=15, fontweight="semibold", color=INK)
     else:
-        ax.set_title(title, loc="left", pad=12)
+        ax.set_title(title, loc="center", pad=12)
 
 
 def add_footer(ax, source: str, note: str | None = None) -> None:
