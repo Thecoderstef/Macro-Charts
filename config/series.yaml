@@ -11,7 +11,7 @@ defaults:
 
 charts:
   - id: cpi_inflation
-    title: "US inflation, measured two ways"
+    title: "US CPI"
     subtitle: "Consumer price index, year-over-year % change"
     ylabel: "% YoY"
     transform: yoy
@@ -22,7 +22,7 @@ charts:
       - {fred_id: CPILFESL, label: "Core CPI"}
 
   - id: pce_inflation
-    title: "The gauge the Fed actually targets"
+    title: "US PCE"
     subtitle: "Personal consumption expenditures price index, year-over-year % change"
     ylabel: "% YoY"
     transform: yoy
@@ -35,7 +35,7 @@ charts:
       - {fred_id: PCEPILFE, label: "Core PCE"}
 
   - id: cpi_momentum
-    title: "Recent momentum runs ahead of the annual rate"
+    title: "CPI Momentum"
     subtitle: "Core CPI, year-over-year vs three-month annualised % change"
     ylabel: "%"
     transform: yoy
@@ -46,7 +46,7 @@ charts:
       - {fred_id: CPILFESL, label: "3m annualised", transform: three_month_annualised}
 
   - id: labour_market
-    title: "Unemployment, the slowest of the fast indicators"
+    title: "US Unemployement Rate"
     subtitle: "Civilian unemployment rate, % of labour force"
     ylabel: "%"
     transform: level
@@ -54,7 +54,7 @@ charts:
       - {fred_id: UNRATE, label: "Unemployment rate"}
 
   - id: policy_vs_inflation
-    title: "The policy rate against the inflation it is chasing"
+    title: "FED Rate vs Inflation"
     subtitle: "Effective federal funds rate and core PCE inflation, %"
     ylabel: "%"
     start: "2000-01-01"
@@ -64,7 +64,7 @@ charts:
       - {fred_id: PCEPILFE, label: "Core PCE (YoY)", transform: yoy}
 
   - id: money_supply
-    title: "Money supply growth, nominal and real"
+    title: "US Money supply growth, nominal and real"
     subtitle: "M2 money stock, year-over-year % change"
     ylabel: "% YoY"
     transform: yoy
@@ -76,7 +76,7 @@ charts:
       - {fred_id: M2REAL, label: "M2 (real)"}
 
   - id: gdp_growth
-    title: "Growth, measured fast and measured slow"
+    title: "US GDP Growth"
     subtitle: "Real GDP, quarter-on-quarter annualised vs year-over-year % change"
     ylabel: "%"
     start: "2000-01-01"
