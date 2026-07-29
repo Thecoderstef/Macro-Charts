@@ -1,6 +1,9 @@
 # Every chart in the repo is defined here. To add one, copy a block and change
 # the FRED series IDs. Find IDs at https://fred.stlouisfed.org/ or from Python:
 #   python -c "from fredmacro.fred import search; print(search('core pce'))"
+#
+# INDENTATION MATTERS. Each chart starts with two spaces, then a dash.
+# Its settings sit at four spaces. Items under `series:` sit at six spaces.
 
 defaults:
   start: "1995-01-01"
@@ -8,7 +11,7 @@ defaults:
 
 charts:
   - id: cpi_inflation
-    title: "US Inflation (CPI)"
+    title: "US inflation, measured two ways"
     subtitle: "Consumer price index, year-over-year % change"
     ylabel: "% YoY"
     transform: yoy
@@ -19,7 +22,7 @@ charts:
       - {fred_id: CPILFESL, label: "Core CPI"}
 
   - id: pce_inflation
-    title: "US Inflation (PCE)"
+    title: "The gauge the Fed actually targets"
     subtitle: "Personal consumption expenditures price index, year-over-year % change"
     ylabel: "% YoY"
     transform: yoy
@@ -32,7 +35,7 @@ charts:
       - {fred_id: PCEPILFE, label: "Core PCE"}
 
   - id: cpi_momentum
-    title: "CPI Momentum"
+    title: "Recent momentum runs ahead of the annual rate"
     subtitle: "Core CPI, year-over-year vs three-month annualised % change"
     ylabel: "%"
     transform: yoy
@@ -43,7 +46,7 @@ charts:
       - {fred_id: CPILFESL, label: "3m annualised", transform: three_month_annualised}
 
   - id: labour_market
-    title: "Unemployment Rate"
+    title: "Unemployment, the slowest of the fast indicators"
     subtitle: "Civilian unemployment rate, % of labour force"
     ylabel: "%"
     transform: level
@@ -51,7 +54,7 @@ charts:
       - {fred_id: UNRATE, label: "Unemployment rate"}
 
   - id: policy_vs_inflation
-    title: "FED Rates vs Inflation"
+    title: "The policy rate against the inflation it is chasing"
     subtitle: "Effective federal funds rate and core PCE inflation, %"
     ylabel: "%"
     start: "2000-01-01"
@@ -60,7 +63,7 @@ charts:
       - {fred_id: FEDFUNDS, label: "Fed funds rate", transform: level}
       - {fred_id: PCEPILFE, label: "Core PCE (YoY)", transform: yoy}
 
-- id: money_supply
+  - id: money_supply
     title: "Money supply growth, nominal and real"
     subtitle: "M2 money stock, year-over-year % change"
     ylabel: "% YoY"
