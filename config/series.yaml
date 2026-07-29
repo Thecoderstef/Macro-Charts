@@ -8,7 +8,7 @@ defaults:
 
 charts:
   - id: cpi_inflation
-    title: "US inflation, measured two ways"
+    title: "US Inflation (CPI)"
     subtitle: "Consumer price index, year-over-year % change"
     ylabel: "% YoY"
     transform: yoy
@@ -19,7 +19,7 @@ charts:
       - {fred_id: CPILFESL, label: "Core CPI"}
 
   - id: pce_inflation
-    title: "The gauge the Fed actually targets"
+    title: "US Inflation (PCE)"
     subtitle: "Personal consumption expenditures price index, year-over-year % change"
     ylabel: "% YoY"
     transform: yoy
@@ -32,7 +32,7 @@ charts:
       - {fred_id: PCEPILFE, label: "Core PCE"}
 
   - id: cpi_momentum
-    title: "Recent momentum runs ahead of the annual rate"
+    title: "CPI Momentum"
     subtitle: "Core CPI, year-over-year vs three-month annualised % change"
     ylabel: "%"
     transform: yoy
@@ -43,7 +43,7 @@ charts:
       - {fred_id: CPILFESL, label: "3m annualised", transform: three_month_annualised}
 
   - id: labour_market
-    title: "Unemployment, the slowest of the fast indicators"
+    title: "Unemployment Rate"
     subtitle: "Civilian unemployment rate, % of labour force"
     ylabel: "%"
     transform: level
@@ -51,7 +51,7 @@ charts:
       - {fred_id: UNRATE, label: "Unemployment rate"}
 
   - id: policy_vs_inflation
-    title: "The policy rate against the inflation it is chasing"
+    title: "FED Rates vs Inflation"
     subtitle: "Effective federal funds rate and core PCE inflation, %"
     ylabel: "%"
     start: "2000-01-01"
@@ -59,3 +59,26 @@ charts:
     series:
       - {fred_id: FEDFUNDS, label: "Fed funds rate", transform: level}
       - {fred_id: PCEPILFE, label: "Core PCE (YoY)", transform: yoy}
+
+- id: money_supply
+    title: "Money supply growth, nominal and real"
+    subtitle: "M2 money stock, year-over-year % change"
+    ylabel: "% YoY"
+    transform: yoy
+    start: "1995-01-01"
+    zero_line: true
+    note: "M2's definition changed in May 2020 — savings deposits were reclassified, creating a break"
+    series:
+      - {fred_id: M2SL, label: "M2 (nominal)"}
+      - {fred_id: M2REAL, label: "M2 (real)"}
+
+  - id: gdp_growth
+    title: "Growth, measured fast and measured slow"
+    subtitle: "Real GDP, quarter-on-quarter annualised vs year-over-year % change"
+    ylabel: "%"
+    start: "2000-01-01"
+    zero_line: true
+    note: "2020 quarters dominate the vertical scale"
+    series:
+      - {fred_id: GDPC1, label: "QoQ annualised", transform: qoq_annualised}
+      - {fred_id: GDPC1, label: "Year-over-year", transform: yoy}
