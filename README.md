@@ -144,42 +144,42 @@ payrolls get revised, and the diff on those CSVs is a free record of it.
 ## Charts
 
 <!-- CHARTS:START -->
-_Last rebuilt 29 July 2026, 09:15 UTC._
+_Last rebuilt 29 July 2026, 09:20 UTC._
 
-### US inflation, measured two ways
+### US CPI
 `Headline CPI` — latest **3.7** (Jun 2026)
 
-![US inflation, measured two ways](charts/cpi_inflation.png)
+![US CPI](charts/cpi_inflation.png)
 
-### The gauge the Fed actually targets
+### US PCE
 `Headline PCE` — latest **4.1** (May 2026)
 
-![The gauge the Fed actually targets](charts/pce_inflation.png)
+![US PCE](charts/pce_inflation.png)
 
-### Recent momentum runs ahead of the annual rate
+### CPI Momentum
 `YoY` — latest **2.8** (Jun 2026)
 
-![Recent momentum runs ahead of the annual rate](charts/cpi_momentum.png)
+![CPI Momentum](charts/cpi_momentum.png)
 
-### Unemployment, the slowest of the fast indicators
+### US Unemployement Rate
 `Unemployment rate` — latest **4.2** (Jun 2026)
 
-![Unemployment, the slowest of the fast indicators](charts/labour_market.png)
+![US Unemployement Rate](charts/labour_market.png)
 
-### The policy rate against the inflation it is chasing
+### FED Rate vs Inflation
 `Fed funds rate` — latest **3.6** (Jun 2026)
 
-![The policy rate against the inflation it is chasing](charts/policy_vs_inflation.png)
+![FED Rate vs Inflation](charts/policy_vs_inflation.png)
 
-### Money supply growth, nominal and real
+### US Money supply growth, nominal and real
 `M2 (nominal)` — latest **5.5** (Jun 2026)
 
-![Money supply growth, nominal and real](charts/money_supply.png)
+![US Money supply growth, nominal and real](charts/money_supply.png)
 
-### Growth, measured fast and measured slow
+### US GDP Growth
 `QoQ annualised` — latest **2.1** (Jan 2026)
 
-![Growth, measured fast and measured slow](charts/gdp_growth.png)
+![US GDP Growth](charts/gdp_growth.png)
 
 <!-- CHARTS:END -->
 
