@@ -144,7 +144,7 @@ payrolls get revised, and the diff on those CSVs is a free record of it.
 ## Charts
 
 <!-- CHARTS:START -->
-_Last rebuilt 28 July 2026, 13:18 UTC._
+_Last rebuilt 29 July 2026, 09:15 UTC._
 
 ### US inflation, measured two ways
 `Headline CPI` — latest **3.7** (Jun 2026)
@@ -170,6 +170,16 @@ _Last rebuilt 28 July 2026, 13:18 UTC._
 `Fed funds rate` — latest **3.6** (Jun 2026)
 
 ![The policy rate against the inflation it is chasing](charts/policy_vs_inflation.png)
+
+### Money supply growth, nominal and real
+`M2 (nominal)` — latest **5.5** (Jun 2026)
+
+![Money supply growth, nominal and real](charts/money_supply.png)
+
+### Growth, measured fast and measured slow
+`QoQ annualised` — latest **2.1** (Jan 2026)
+
+![Growth, measured fast and measured slow](charts/gdp_growth.png)
 
 <!-- CHARTS:END -->
 
