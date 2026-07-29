@@ -69,5 +69,9 @@ TRANSFORMS = {
     "level": level,
     "yoy": yoy,
     "mom_annualised": mom_annualised,
+    # Same function as mom_annualised — on quarterly data it annualises the
+    # quarter-on-quarter change, which is the headline US GDP number BEA
+    # reports ("GDP grew at a 3.2% annual rate"). Aliased for readability.
+    "qoq_annualised": mom_annualised,
     "three_month_annualised": three_month_annualised,
 }
