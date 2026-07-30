@@ -1,149 +1,150 @@
-#!/usr/bin/env python3
-"""Rebuild every chart defined in config/series.yaml.
-
-    python update.py                  # all charts
-    python update.py cpi_inflation    # just one, while you iterate
-
-Outputs:
-    charts/<id>.png   the chart
-    data/<id>.csv     the exact data behind it, so results are auditable
-    README.md         chart gallery + timestamp refreshed in place
-"""
+"""Chart construction: one function that turns a dict of series into a PNG."""
 
 from __future__ import annotations
 
-import sys
-from datetime import date, datetime, timezone
 from pathlib import Path
 
-import yaml
-from dotenv import load_dotenv
+import matplotlib.dates as mdates
+import matplotlib.pyplot as plt
+import pandas as pd
 
-from fredmacro.charts import line_chart
-from fredmacro.fred import get_metadata, get_series
-from fredmacro.style import apply_style
-from fredmacro.transform import TRANSFORMS
+from .fred import get_series
+from .style import MUTED, PALETTE, RECESSION, add_footer, add_titles
 
-ROOT = Path(__file__).parent
-CONFIG = ROOT / "config" / "series.yaml"
-CHARTS_DIR = ROOT / "charts"
-DATA_DIR = ROOT / "data"
-
-START_MARKER = "<!-- CHARTS:START -->"
-END_MARKER = "<!-- CHARTS:END -->"
+_recession_cache: pd.Series | None = None
 
 
-def build_chart(spec: dict, defaults: dict) -> dict:
-    """Fetch, transform and plot one chart. Returns a summary for the README."""
-    chart_id = spec["id"]
-    start = spec.get("start", defaults.get("start", "1995-01-01"))
-    default_transform = spec.get("transform", "level")
+def recession_periods(start: str = "1948-01-01") -> list[tuple[pd.Timestamp, pd.Timestamp]]:
+    """NBER recession dates, as start/end pairs, from FRED series USREC.
 
-    lines: dict = {}
-    for member in spec["series"]:
-        fred_id = member["fred_id"]
-        label = member.get("label", fred_id)
-        transform_name = member.get("transform", default_transform)
-
-        raw = get_series(fred_id, start=start)
-        meta = get_metadata(fred_id)
-        transform = TRANSFORMS[transform_name]
-        lines[label] = transform(raw, meta["frequency"])
-
-        DATA_DIR.mkdir(exist_ok=True)
-        raw.to_csv(DATA_DIR / f"{fred_id}.csv", header=[fred_id])
-
-    outpath = CHARTS_DIR / f"{chart_id}.png"
-    line_chart(
-        lines,
-        title=spec["title"],
-        subtitle=spec.get("subtitle"),
-        ylabel=spec.get("ylabel"),
-        note=spec.get("note"),
-        hline=spec.get("hline"),
-        hline_label=spec.get("hline_label"),
-        zero_line=spec.get("zero_line", False),
-        shade_recessions=spec.get("shade_recessions", defaults.get("shade_recessions", True)),
-        outpath=outpath,
-    )
-
-    latest_label, latest_series = next(iter(lines.items()))
-    return {
-        "id": chart_id,
-        "section": spec.get("section", "Charts"),
-        "title": spec["title"],
-        "path": f"charts/{chart_id}.png",
-        "latest_date": latest_series.index[-1].strftime("%b %Y"),
-        "latest_value": f"{latest_series.iloc[-1]:.1f}",
-        "latest_label": latest_label,
-    }
-
-
-def refresh_readme(summaries: list[dict]) -> None:
-    """Rewrite the gallery block between the markers, leaving prose untouched.
-
-    Charts are grouped under their `section:` heading. Sections appear in the
-    order they first show up in series.yaml, so reordering the config reorders
-    the README — no code change needed.
+    USREC is a monthly 0/1 dummy. We convert runs of 1s into shaded spans.
     """
-    readme = ROOT / "README.md"
-    if not readme.exists():
+    global _recession_cache
+    if _recession_cache is None:
+        _recession_cache = get_series("USREC", start=start)
+    flag = _recession_cache
+    spans, run_start = [], None
+    for date, value in flag.items():
+        if value == 1 and run_start is None:
+            run_start = date
+        elif value == 0 and run_start is not None:
+            spans.append((run_start, date))
+            run_start = None
+    if run_start is not None:
+        spans.append((run_start, flag.index[-1]))
+    return spans
+
+
+def _place_end_labels(ax, entries: list[tuple[str, pd.Series, str]]) -> None:
+    """Draw the marker + label at the end of each line, nudging labels apart
+    vertically when two series finish close together so text never overlaps.
+    """
+    if not entries:
         return
-    text = readme.read_text()
-    if START_MARKER not in text or END_MARKER not in text:
-        return
 
-    # dict preserves insertion order, which is config order
-    sections: dict[str, list[dict]] = {}
-    for item in summaries:
-        sections.setdefault(item["section"], []).append(item)
+    ymin, ymax = ax.get_ylim()
+    # Minimum vertical gap between label centres, in data units. ~9% of the
+    # visible range reads as "two separate rows of text" without excess space.
+    min_gap = (ymax - ymin) * 0.09
 
-    stamp = datetime.now(timezone.utc).strftime("%d %B %Y, %H:%M UTC")
-    block = [START_MARKER, f"_Last rebuilt {stamp}._", ""]
-    for section_name, items in sections.items():
-        block += [f"## {section_name}", ""]
-        for item in items:
-            block += [
-                f"### {item['title']}",
-                f"`{item['latest_label']}` — latest **{item['latest_value']}** "
-                f"({item['latest_date']})",
-                "",
-                f"![{item['title']}]({item['path']})",
-                "",
-            ]
-    block.append(END_MARKER)
+    items = sorted(
+        [
+            {"label": label, "x": s.index[-1], "y": s.iloc[-1], "colour": colour}
+            for label, s, colour in entries
+        ],
+        key=lambda d: d["y"],
+    )
+    # Text is aligned to the right-most series so the labels form a tidy column,
+    # but each marker stays on its own line's true final point. This matters when
+    # a chart mixes frequencies — a daily series ends weeks after a monthly one.
+    x_text = max(item["x"] for item in items)
 
-    head, _, rest = text.partition(START_MARKER)
-    _, _, tail = rest.partition(END_MARKER)
-    readme.write_text(head + "\n".join(block) + tail)
+    for item in items:
+        item["y_label"] = item["y"]
+    for i in range(1, len(items)):
+        floor = items[i - 1]["y_label"] + min_gap
+        if items[i]["y_label"] < floor:
+            items[i]["y_label"] = floor
 
-
-def main() -> int:
-    load_dotenv()
-    apply_style()
-    CHARTS_DIR.mkdir(exist_ok=True)
-
-    config = yaml.safe_load(CONFIG.read_text())
-    defaults = config.get("defaults", {})
-    wanted = set(sys.argv[1:])
-
-    summaries, failures = [], []
-    for spec in config["charts"]:
-        if wanted and spec["id"] not in wanted:
-            continue
-        try:
-            summaries.append(build_chart(spec, defaults))
-            print(f"  ok    {spec['id']}")
-        except Exception as exc:  # keep going; one dead series shouldn't kill the run
-            failures.append((spec["id"], exc))
-            print(f"  FAIL  {spec['id']}: {exc}")
-
-    if summaries and not wanted:
-        refresh_readme(summaries)
-
-    print(f"\n{len(summaries)} chart(s) written to {CHARTS_DIR}/")
-    return 1 if failures else 0
+    for item in items:
+        colour, x_true, y_true = item["colour"], item["x"], item["y"]
+        ax.plot([x_true], [y_true], marker="o", markersize=4.5, color=colour, zorder=5)
+        ax.annotate(
+            f"{item['label']}\n{y_true:,.1f}",
+            xy=(x_true, y_true),
+            xytext=(x_text, item["y_label"]),
+            textcoords="data",
+            va="center",
+            ha="left",
+            fontsize=10,
+            color=colour,
+            fontweight="semibold",
+            linespacing=1.4,
+        )
 
 
-if __name__ == "__main__":
-    raise SystemExit(main())
+def line_chart(
+    series: dict[str, pd.Series],
+    title: str,
+    subtitle: str | None = None,
+    ylabel: str | None = None,
+    source: str = "FRED, Federal Reserve Bank of St. Louis",
+    note: str | None = None,
+    hline: float | None = None,
+    hline_label: str | None = None,
+    zero_line: bool = False,
+    shade_recessions: bool = True,
+    outpath: str | Path | None = None,
+):
+    """Draw one chart. `series` maps display label -> pandas Series."""
+    fig, ax = plt.subplots()
+
+    if shade_recessions:
+        earliest = min(s.index[0] for s in series.values())
+        for span_start, span_end in recession_periods():
+            if span_end >= earliest:
+                ax.axvspan(max(span_start, earliest), span_end,
+                           color=RECESSION, alpha=0.06, linewidth=0, zorder=0)
+
+    if zero_line:
+        ax.axhline(0, color=MUTED, linewidth=1.0, alpha=0.6, zorder=1)
+
+    if hline is not None:
+        ax.axhline(hline, color=MUTED, linewidth=1.2, linestyle=(0, (4, 3)), zorder=1)
+        if hline_label:
+            ax.annotate(hline_label, xy=(0.005, hline), xycoords=("axes fraction", "data"),
+                        xytext=(0, 5), textcoords="offset points",
+                        fontsize=9, color=MUTED)
+
+    label_entries = []
+    for i, (label, s) in enumerate(series.items()):
+        colour = PALETTE[i % len(PALETTE)]
+        ax.plot(s.index, s.values, color=colour, zorder=3,
+                linewidth=1.6 if i == 0 else 1.3)
+        label_entries.append((label, s, colour))
+
+    # Leave room on the right for the direct labels.
+    ax.margins(x=0.02)
+    xmin, xmax = ax.get_xlim()
+    ax.set_xlim(xmin, xmax + (xmax - xmin) * 0.16)
+
+    # Labels are placed after xlim/ylim are finalised, so the collision-check
+    # math and the x-position of the label both line up with what's drawn.
+    _place_end_labels(ax, label_entries)
+
+    ax.xaxis.set_major_locator(mdates.AutoDateLocator(minticks=5, maxticks=9))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
+    if ylabel:
+        ax.set_ylabel(ylabel)
+
+    add_titles(ax, title, subtitle)
+    latest = max(s.index[-1] for s in series.values()).strftime("%b %Y")
+    add_footer(ax, source, note=f"Latest observation: {latest}"
+               + (f" · {note}" if note else ""))
+
+    if outpath:
+        outpath = Path(outpath)
+        outpath.parent.mkdir(parents=True, exist_ok=True)
+        fig.savefig(outpath)
+        plt.close(fig)
+    return fig, ax
