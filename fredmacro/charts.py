@@ -94,6 +94,7 @@ def line_chart(
     hline_label: str | None = None,
     zero_line: bool = False,
     shade_recessions: bool = True,
+    ylim: list | tuple | None = None,
     outpath: str | Path | None = None,
 ):
     """Draw one chart. `series` maps display label -> pandas Series."""
@@ -127,6 +128,14 @@ def line_chart(
     ax.margins(x=0.02)
     xmin, xmax = ax.get_xlim()
     ax.set_xlim(xmin, xmax + (xmax - xmin) * 0.16)
+
+    # A manual y-range clips outliers so recent detail stays readable. Matplotlib
+    # clips the lines at the axes boundary, so an excluded spike simply runs off
+    # the edge — say so in `note:` rather than letting a reader assume the series
+    # never went further. Set before labelling, since label spacing is computed
+    # from the visible axis range.
+    if ylim:
+        ax.set_ylim(float(ylim[0]), float(ylim[1]))
 
     # Labels are placed after xlim/ylim are finalised, so the collision-check
     # math and the x-position of the label both line up with what's drawn.
