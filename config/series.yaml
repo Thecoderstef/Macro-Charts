@@ -51,8 +51,8 @@ charts:
     subtitle: "Initial jobless claims, weekly, seasonally adjusted"
     ylabel: "Claims"
     transform: level
-    start: "2022-01-01"
-    note: "Starts 2022 — the 2020 spike to 6m would flatten everything else"
+    start: "2021-01-01"
+    note: "Starts 2021 — the 2020 spike to 6m would flatten everything else"
     series:
       - {fred_id: ICSA, label: "Initial claims"}
 
@@ -77,7 +77,8 @@ charts:
     ylabel: "%"
     start: "2000-01-01"
     zero_line: true
-    note: "2020 quarters dominate the vertical scale"
+    ylim: [-20, 20]
+    note: "Axis clipped to +/-20%. The 2020 quarters run off-scale, at roughly -28% and +35%"
     series:
       - {fred_id: GDPC1, label: "QoQ annualised", transform: qoq_annualised}
       - {fred_id: GDPC1, label: "Year-over-year", transform: yoy}
