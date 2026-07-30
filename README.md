@@ -144,9 +144,40 @@ payrolls get revised, and the diff on those CSVs is a free record of it.
 ## Charts
 
 <!-- CHARTS:START -->
-_Last rebuilt 30 July 2026, 12:26 UTC._
+_Last rebuilt 30 July 2026, 12:44 UTC._
 
-## United States
+## 1. Leading indicators
+
+### The curve that has called every recession
+`10y minus 3m` — latest **0.8** (Jul 2026)
+
+![The curve that has called every recession](charts/yield_curve.png)
+
+### The fastest read on the labour market
+`Initial claims` — latest **197000.0** (Jul 2026)
+
+![The fastest read on the labour market](charts/jobless_claims.png)
+
+### Housing leads the cycle, and permits lead housing
+`Building permits` — latest **1374.0** (Jun 2026)
+
+![Housing leads the cycle, and permits lead housing](charts/building_permits.png)
+
+## 2. Growth and activity
+
+### US growth, measured fast and measured slow
+`QoQ annualised` — latest **2.1** (Jan 2026)
+
+![US growth, measured fast and measured slow](charts/gdp_growth.png)
+
+## 3. Labour market
+
+### Unemployment, the slowest of the fast indicators
+`Unemployment rate` — latest **4.2** (Jun 2026)
+
+![Unemployment, the slowest of the fast indicators](charts/labour_market.png)
+
+## 4. Inflation - realised
 
 ### US inflation, measured two ways
 `Headline CPI` — latest **3.7** (Jun 2026)
@@ -163,27 +194,63 @@ _Last rebuilt 30 July 2026, 12:26 UTC._
 
 ![Recent momentum runs ahead of the annual rate](charts/cpi_momentum.png)
 
-### Unemployment, the slowest of the fast indicators
-`Unemployment rate` — latest **4.2** (Jun 2026)
+## 5. Inflation - expected
 
-![Unemployment, the slowest of the fast indicators](charts/labour_market.png)
+### What the bond market expects
+`10y breakeven` — latest **2.3** (Jul 2026)
+
+![What the bond market expects](charts/inflation_expectations.png)
+
+### Priced against delivered
+`10y breakeven` — latest **2.3** (Jul 2026)
+
+![Priced against delivered](charts/expected_vs_realised.png)
+
+## 6. Rates and policy
 
 ### The policy rate against the inflation it is chasing
 `Fed funds rate` — latest **3.6** (Jun 2026)
 
 ![The policy rate against the inflation it is chasing](charts/policy_vs_inflation.png)
 
+### The two tenors that matter most
+`10-year` — latest **4.6** (Jul 2026)
+
+![The two tenors that matter most](charts/treasury_yields.png)
+
+### The discount rate that actually matters
+`Nominal 10y` — latest **4.6** (Jul 2026)
+
+![The discount rate that actually matters](charts/real_yields.png)
+
+## 7. Financial conditions
+
+### Credit usually cracks before equities do
+`High yield` — latest **2.8** (Jul 2026)
+
+![Credit usually cracks before equities do](charts/credit_spreads.png)
+
+### The dollar, which prices everything else
+`Broad dollar` — latest **120.7** (Jul 2026)
+
+![The dollar, which prices everything else](charts/dollar.png)
+
+### The size of the Fed's footprint
+`Fed total assets` — latest **6747378.0** (Jul 2026)
+
+![The size of the Fed's footprint](charts/fed_balance_sheet.png)
+
+### The liquidity buffer draining away
+`ON RRP` — latest **2.6** (Jul 2026)
+
+![The liquidity buffer draining away](charts/reverse_repo.png)
+
 ### Money supply growth, nominal and real
 `M2 (nominal)` — latest **5.5** (Jun 2026)
 
 ![Money supply growth, nominal and real](charts/money_supply.png)
 
-### US growth, measured fast and measured slow
-`QoQ annualised` — latest **2.1** (Jan 2026)
-
-![US growth, measured fast and measured slow](charts/gdp_growth.png)
-
-## Switzerland
+## 8. Switzerland
 
 ### Swiss inflation, the outlier of the rich world
 `Swiss HICP` — latest **0.7** (Jun 2026)
@@ -200,7 +267,12 @@ _Last rebuilt 30 July 2026, 12:26 UTC._
 
 ![Swiss growth](charts/ch_gdp.png)
 
-## Euro area
+### The franc, permanent headwind and permanent haven
+`CHF per USD` — latest **0.8** (Jul 2026)
+
+![The franc, permanent headwind and permanent haven](charts/chf_usd.png)
+
+## 9. Euro area
 
 ### Euro area inflation
 `Euro area HICP` — latest **2.8** (Jun 2026)
