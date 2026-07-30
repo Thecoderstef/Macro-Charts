@@ -64,6 +64,7 @@ def build_chart(spec: dict, defaults: dict) -> dict:
         hline_label=spec.get("hline_label"),
         zero_line=spec.get("zero_line", False),
         shade_recessions=spec.get("shade_recessions", defaults.get("shade_recessions", True)),
+        ylim=spec.get("ylim"),
         outpath=outpath,
     )
 
