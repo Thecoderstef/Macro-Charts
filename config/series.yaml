@@ -34,7 +34,7 @@ charts:
 
   - id: yield_curve
     section: 1. Leading indicators
-    title: "The curve that has called every recession"
+    title: "US Yield Curve"
     subtitle: "Treasury yield spreads, percentage points"
     ylabel: "pp"
     transform: level
@@ -47,7 +47,7 @@ charts:
 
   - id: jobless_claims
     section: 1. Leading indicators
-    title: "The fastest read on the labour market"
+    title: "US Initial Jobless Claims"
     subtitle: "Initial jobless claims, weekly, seasonally adjusted"
     ylabel: "Claims"
     transform: level
@@ -58,7 +58,7 @@ charts:
 
   - id: building_permits
     section: 1. Leading indicators
-    title: "Housing leads the cycle, and permits lead housing"
+    title: "US Building Permits"
     subtitle: "New private housing units authorised by building permits, thousands, SAAR"
     ylabel: "Thousands"
     transform: level
@@ -72,7 +72,7 @@ charts:
 
   - id: gdp_growth
     section: 2. Growth and activity
-    title: "US growth, measured fast and measured slow"
+    title: "US GDP Growth"
     subtitle: "Real GDP, quarter-on-quarter annualised vs year-over-year % change"
     ylabel: "%"
     start: "2000-01-01"
@@ -88,7 +88,7 @@ charts:
 
   - id: labour_market
     section: 3. Labour market
-    title: "Unemployment, the slowest of the fast indicators"
+    title: "US Unemployment Rate"
     subtitle: "Civilian unemployment rate, % of labour force"
     ylabel: "%"
     transform: level
@@ -101,7 +101,7 @@ charts:
 
   - id: cpi_inflation
     section: 4. Inflation - realised
-    title: "US inflation, measured two ways"
+    title: "US CPI"
     subtitle: "Consumer price index, year-over-year % change"
     ylabel: "% YoY"
     transform: yoy
@@ -113,7 +113,7 @@ charts:
 
   - id: pce_inflation
     section: 4. Inflation - realised
-    title: "The gauge the Fed actually targets"
+    title: "US PCE"
     subtitle: "Personal consumption expenditures price index, year-over-year % change"
     ylabel: "% YoY"
     transform: yoy
@@ -127,7 +127,7 @@ charts:
 
   - id: cpi_momentum
     section: 4. Inflation - realised
-    title: "Recent momentum runs ahead of the annual rate"
+    title: "US Core CPI Momentum"
     subtitle: "Core CPI, year-over-year vs three-month annualised % change"
     ylabel: "%"
     transform: yoy
@@ -143,7 +143,7 @@ charts:
 
   - id: inflation_expectations
     section: 5. Inflation - expected
-    title: "What the bond market expects"
+    title: "US Inflation Expectations"
     subtitle: "Breakeven inflation rates implied by TIPS, %"
     ylabel: "%"
     transform: level
@@ -157,7 +157,7 @@ charts:
 
   - id: expected_vs_realised
     section: 5. Inflation - expected
-    title: "Priced against delivered"
+    title: "US Breakevens vs Realised CPI"
     subtitle: "10-year breakeven inflation vs realised headline CPI, %"
     ylabel: "%"
     start: "2003-01-01"
@@ -173,7 +173,7 @@ charts:
 
   - id: policy_vs_inflation
     section: 6. Rates and policy
-    title: "The policy rate against the inflation it is chasing"
+    title: "US Policy Rate vs Core PCE"
     subtitle: "Effective federal funds rate and core PCE inflation, %"
     ylabel: "%"
     start: "2000-01-01"
@@ -184,7 +184,7 @@ charts:
 
   - id: treasury_yields
     section: 6. Rates and policy
-    title: "The two tenors that matter most"
+    title: "US Treasury Yields"
     subtitle: "Treasury constant maturity yields, %"
     ylabel: "%"
     transform: level
@@ -196,7 +196,7 @@ charts:
 
   - id: real_yields
     section: 6. Rates and policy
-    title: "The discount rate that actually matters"
+    title: "US Real vs Nominal 10-Year Yield"
     subtitle: "10-year Treasury yield, nominal vs inflation-indexed, %"
     ylabel: "%"
     transform: level
@@ -213,7 +213,7 @@ charts:
 
   - id: credit_spreads
     section: 7. Financial conditions
-    title: "Credit usually cracks before equities do"
+    title: "US Credit Spreads"
     subtitle: "ICE BofA option-adjusted spreads, percentage points"
     ylabel: "pp"
     transform: level
@@ -226,7 +226,7 @@ charts:
 
   - id: dollar
     section: 7. Financial conditions
-    title: "The dollar, which prices everything else"
+    title: "US Dollar Index"
     subtitle: "Nominal broad US dollar index, Jan 2006 = 100"
     ylabel: "Index"
     transform: level
@@ -236,7 +236,7 @@ charts:
 
   - id: fed_balance_sheet
     section: 7. Financial conditions
-    title: "The size of the Fed's footprint"
+    title: "Fed Balance Sheet"
     subtitle: "Total Federal Reserve assets, millions of USD, weekly"
     ylabel: "$m"
     transform: level
@@ -246,7 +246,7 @@ charts:
 
   - id: reverse_repo
     section: 7. Financial conditions
-    title: "The liquidity buffer draining away"
+    title: "Fed Overnight Reverse Repo"
     subtitle: "Overnight reverse repo, Treasury securities sold, billions of USD"
     ylabel: "$bn"
     transform: level
@@ -256,7 +256,7 @@ charts:
 
   - id: money_supply
     section: 7. Financial conditions
-    title: "Money supply growth, nominal and real"
+    title: "US Money Supply (M2)"
     subtitle: "M2 money stock, year-over-year % change"
     ylabel: "% YoY"
     transform: yoy
@@ -272,7 +272,7 @@ charts:
 
   - id: ch_inflation
     section: 8. Switzerland
-    title: "Swiss inflation, the outlier of the rich world"
+    title: "Swiss CPI"
     subtitle: "Harmonised index of consumer prices, year-over-year % change"
     ylabel: "% YoY"
     transform: yoy
@@ -285,7 +285,7 @@ charts:
 
   - id: ch_unemployment
     section: 8. Switzerland
-    title: "Swiss unemployment"
+    title: "Swiss Unemployment Rate"
     subtitle: "Unemployment rate, 15 and over, % of labour force"
     ylabel: "%"
     transform: level
@@ -297,7 +297,7 @@ charts:
 
   - id: ch_gdp
     section: 8. Switzerland
-    title: "Swiss growth"
+    title: "Swiss GDP Growth"
     subtitle: "Real GDP, quarter-on-quarter annualised vs year-over-year % change"
     ylabel: "%"
     start: "2000-01-01"
@@ -309,7 +309,7 @@ charts:
 
   - id: chf_usd
     section: 8. Switzerland
-    title: "The franc, permanent headwind and permanent haven"
+    title: "CHF/USD Exchange Rate"
     subtitle: "Swiss francs per US dollar, daily"
     ylabel: "CHF/USD"
     transform: level
@@ -325,7 +325,7 @@ charts:
 
   - id: ea_inflation
     section: 9. Euro area
-    title: "Euro area inflation"
+    title: "Euro Area CPI"
     subtitle: "Harmonised index of consumer prices, year-over-year % change"
     ylabel: "% YoY"
     transform: yoy
@@ -340,7 +340,7 @@ charts:
 
   - id: ea_unemployment
     section: 9. Euro area
-    title: "Euro area unemployment"
+    title: "Euro Area Unemployment Rate"
     subtitle: "Unemployment rate, 15 and over, % of labour force"
     ylabel: "%"
     transform: level
@@ -351,7 +351,7 @@ charts:
 
   - id: ea_gdp
     section: 9. Euro area
-    title: "Euro area growth"
+    title: "Euro Area GDP Growth"
     subtitle: "Real GDP, quarter-on-quarter annualised vs year-over-year % change"
     ylabel: "%"
     start: "2000-01-01"
