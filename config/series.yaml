@@ -77,7 +77,7 @@ charts:
     ylabel: "%"
     start: "2000-01-01"
     zero_line: true
-    ylim: [-20, 20]
+    ylim: [-15, 15]
     note: "Axis clipped to +/-20%. The 2020 quarters run off-scale, at roughly -28% and +35%"
     series:
       - {fred_id: GDPC1, label: "QoQ annualised", transform: qoq_annualised}
