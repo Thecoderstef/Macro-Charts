@@ -70,6 +70,7 @@ def build_chart(spec: dict, defaults: dict) -> dict:
     latest_label, latest_series = next(iter(lines.items()))
     return {
         "id": chart_id,
+        "section": spec.get("section", "Charts"),
         "title": spec["title"],
         "path": f"charts/{chart_id}.png",
         "latest_date": latest_series.index[-1].strftime("%b %Y"),
@@ -79,7 +80,12 @@ def build_chart(spec: dict, defaults: dict) -> dict:
 
 
 def refresh_readme(summaries: list[dict]) -> None:
-    """Rewrite the gallery block between the markers, leaving prose untouched."""
+    """Rewrite the gallery block between the markers, leaving prose untouched.
+
+    Charts are grouped under their `section:` heading. Sections appear in the
+    order they first show up in series.yaml, so reordering the config reorders
+    the README — no code change needed.
+    """
     readme = ROOT / "README.md"
     if not readme.exists():
         return
@@ -87,17 +93,24 @@ def refresh_readme(summaries: list[dict]) -> None:
     if START_MARKER not in text or END_MARKER not in text:
         return
 
+    # dict preserves insertion order, which is config order
+    sections: dict[str, list[dict]] = {}
+    for item in summaries:
+        sections.setdefault(item["section"], []).append(item)
+
     stamp = datetime.now(timezone.utc).strftime("%d %B %Y, %H:%M UTC")
     block = [START_MARKER, f"_Last rebuilt {stamp}._", ""]
-    for item in summaries:
-        block += [
-            f"### {item['title']}",
-            f"`{item['latest_label']}` — latest **{item['latest_value']}** "
-            f"({item['latest_date']})",
-            "",
-            f"![{item['title']}]({item['path']})",
-            "",
-        ]
+    for section_name, items in sections.items():
+        block += [f"## {section_name}", ""]
+        for item in items:
+            block += [
+                f"### {item['title']}",
+                f"`{item['latest_label']}` — latest **{item['latest_value']}** "
+                f"({item['latest_date']})",
+                "",
+                f"![{item['title']}]({item['path']})",
+                "",
+            ]
     block.append(END_MARKER)
 
     head, _, rest = text.partition(START_MARKER)
