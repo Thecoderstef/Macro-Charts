@@ -47,11 +47,18 @@ def _place_end_labels(ax, entries: list[tuple[str, pd.Series, str]]) -> None:
     # visible range reads as "two separate rows of text" without excess space.
     min_gap = (ymax - ymin) * 0.09
 
-    x_last = max(s.index[-1] for _, s, _ in entries)
     items = sorted(
-        [{"label": label, "y": s.iloc[-1], "colour": colour} for label, s, colour in entries],
+        [
+            {"label": label, "x": s.index[-1], "y": s.iloc[-1], "colour": colour}
+            for label, s, colour in entries
+        ],
         key=lambda d: d["y"],
     )
+    # Text is aligned to the right-most series so the labels form a tidy column,
+    # but each marker stays on its own line's true final point. This matters when
+    # a chart mixes frequencies — a daily series ends weeks after a monthly one.
+    x_text = max(item["x"] for item in items)
+
     for item in items:
         item["y_label"] = item["y"]
     for i in range(1, len(items)):
@@ -60,15 +67,12 @@ def _place_end_labels(ax, entries: list[tuple[str, pd.Series, str]]) -> None:
             items[i]["y_label"] = floor
 
     for item in items:
-        colour, y_true, y_label = item["colour"], item["y"], item["y_label"]
-        ax.plot([x_last], [y_true], marker="o", markersize=4.5, color=colour, zorder=5)
-        # xy is the true data point; xytext is the (possibly nudged) label
-        # position, both in data coordinates, plus a small fixed pixel offset
-        # to the right so the text doesn't sit on top of the axis line.
+        colour, x_true, y_true = item["colour"], item["x"], item["y"]
+        ax.plot([x_true], [y_true], marker="o", markersize=4.5, color=colour, zorder=5)
         ax.annotate(
             f"{item['label']}\n{y_true:,.1f}",
-            xy=(x_last, y_true),
-            xytext=(x_last, y_label),
+            xy=(x_true, y_true),
+            xytext=(x_text, item["y_label"]),
             textcoords="data",
             va="center",
             ha="left",
