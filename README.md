@@ -144,7 +144,7 @@ payrolls get revised, and the diff on those CSVs is a free record of it.
 ## Charts
 
 <!-- CHARTS:START -->
-_Last rebuilt 30 July 2026, 13:09 UTC._
+_Last rebuilt 30 July 2026, 13:27 UTC._
 
 ## 1. Leading indicators
 
