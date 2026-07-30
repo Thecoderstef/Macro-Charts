@@ -4,14 +4,27 @@
 #
 # INDENTATION MATTERS. Each chart starts with two spaces, then a dash.
 # Its settings sit at four spaces. Items under `series:` sit at six spaces.
+#
+# `section:` groups charts in the README. Sections appear in the order they
+# first appear below, so moving a block moves it in the README too.
+#
+# NOTE ON RECESSION SHADING: the grey bands come from USREC, the NBER's dating
+# of *US* recessions. They are switched off on the Swiss and euro area charts,
+# because marking US recessions on a Swiss GDP chart would be wrong.
 
 defaults:
   start: "1995-01-01"
   shade_recessions: true
 
 charts:
+
+  # ======================================================================
+  # UNITED STATES
+  # ======================================================================
+
   - id: cpi_inflation
-    title: "US CPI"
+    section: United States
+    title: "US inflation, measured two ways"
     subtitle: "Consumer price index, year-over-year % change"
     ylabel: "% YoY"
     transform: yoy
@@ -22,7 +35,8 @@ charts:
       - {fred_id: CPILFESL, label: "Core CPI"}
 
   - id: pce_inflation
-    title: "US PCE"
+    section: United States
+    title: "The gauge the Fed actually targets"
     subtitle: "Personal consumption expenditures price index, year-over-year % change"
     ylabel: "% YoY"
     transform: yoy
@@ -35,7 +49,8 @@ charts:
       - {fred_id: PCEPILFE, label: "Core PCE"}
 
   - id: cpi_momentum
-    title: "CPI Momentum"
+    section: United States
+    title: "Recent momentum runs ahead of the annual rate"
     subtitle: "Core CPI, year-over-year vs three-month annualised % change"
     ylabel: "%"
     transform: yoy
@@ -46,7 +61,8 @@ charts:
       - {fred_id: CPILFESL, label: "3m annualised", transform: three_month_annualised}
 
   - id: labour_market
-    title: "US Unemployement Rate"
+    section: United States
+    title: "Unemployment, the slowest of the fast indicators"
     subtitle: "Civilian unemployment rate, % of labour force"
     ylabel: "%"
     transform: level
@@ -54,7 +70,8 @@ charts:
       - {fred_id: UNRATE, label: "Unemployment rate"}
 
   - id: policy_vs_inflation
-    title: "FED Rate vs Inflation"
+    section: United States
+    title: "The policy rate against the inflation it is chasing"
     subtitle: "Effective federal funds rate and core PCE inflation, %"
     ylabel: "%"
     start: "2000-01-01"
@@ -64,19 +81,20 @@ charts:
       - {fred_id: PCEPILFE, label: "Core PCE (YoY)", transform: yoy}
 
   - id: money_supply
-    title: "US Money supply growth, nominal and real"
+    section: United States
+    title: "Money supply growth, nominal and real"
     subtitle: "M2 money stock, year-over-year % change"
     ylabel: "% YoY"
     transform: yoy
-    start: "1995-01-01"
     zero_line: true
-    note: "M2's definition changed in May 2020 — savings deposits were reclassified, creating a break"
+    note: "Real M2 is M2 deflated by CPI. M1, not M2, has the May 2020 definitional break"
     series:
       - {fred_id: M2SL, label: "M2 (nominal)"}
       - {fred_id: M2REAL, label: "M2 (real)"}
 
   - id: gdp_growth
-    title: "US GDP Growth"
+    section: United States
+    title: "US growth, measured fast and measured slow"
     subtitle: "Real GDP, quarter-on-quarter annualised vs year-over-year % change"
     ylabel: "%"
     start: "2000-01-01"
@@ -85,3 +103,86 @@ charts:
     series:
       - {fred_id: GDPC1, label: "QoQ annualised", transform: qoq_annualised}
       - {fred_id: GDPC1, label: "Year-over-year", transform: yoy}
+
+  # ======================================================================
+  # SWITZERLAND
+  # ======================================================================
+
+  - id: ch_inflation
+    section: Switzerland
+    title: "Swiss inflation, the outlier of the rich world"
+    subtitle: "Harmonised index of consumer prices, year-over-year % change"
+    ylabel: "% YoY"
+    transform: yoy
+    start: "2006-01-01"
+    zero_line: true
+    shade_recessions: false
+    note: "HICP, the EU-comparable measure. The SNB targets the national LIK, which differs slightly"
+    series:
+      - {fred_id: CP0000CHM086NEST, label: "Swiss HICP"}
+
+  - id: ch_unemployment
+    section: Switzerland
+    title: "Swiss unemployment"
+    subtitle: "Unemployment rate, 15 and over, % of labour force"
+    ylabel: "%"
+    transform: level
+    start: "2000-01-01"
+    shade_recessions: false
+    note: "OECD/ILO definition. SECO's registered-unemployed measure runs 1-2pp lower"
+    series:
+      - {fred_id: LRUNTTTTCHQ156S, label: "Unemployment rate"}
+
+  - id: ch_gdp
+    section: Switzerland
+    title: "Swiss growth"
+    subtitle: "Real GDP, quarter-on-quarter annualised vs year-over-year % change"
+    ylabel: "%"
+    start: "2000-01-01"
+    zero_line: true
+    shade_recessions: false
+    series:
+      - {fred_id: CLVMNACSCAB1GQCH, label: "QoQ annualised", transform: qoq_annualised}
+      - {fred_id: CLVMNACSCAB1GQCH, label: "Year-over-year", transform: yoy}
+
+  # ======================================================================
+  # EURO AREA
+  # ======================================================================
+
+  - id: ea_inflation
+    section: Euro area
+    title: "Euro area inflation"
+    subtitle: "Harmonised index of consumer prices, year-over-year % change"
+    ylabel: "% YoY"
+    transform: yoy
+    start: "1997-01-01"
+    zero_line: true
+    shade_recessions: false
+    hline: 2.0
+    hline_label: "ECB 2% target"
+    note: "Changing composition: EA11 from 1999 through EA20 from 2023"
+    series:
+      - {fred_id: CP0000EZCCM086NEST, label: "Euro area HICP"}
+
+  - id: ea_unemployment
+    section: Euro area
+    title: "Euro area unemployment"
+    subtitle: "Unemployment rate, 15 and over, % of labour force"
+    ylabel: "%"
+    transform: level
+    start: "2000-01-01"
+    shade_recessions: false
+    series:
+      - {fred_id: LRUNTTTTEZQ156S, label: "Unemployment rate"}
+
+  - id: ea_gdp
+    section: Euro area
+    title: "Euro area growth"
+    subtitle: "Real GDP, quarter-on-quarter annualised vs year-over-year % change"
+    ylabel: "%"
+    start: "2000-01-01"
+    zero_line: true
+    shade_recessions: false
+    series:
+      - {fred_id: CLV10MNACB1GQSCAEA20Q, label: "QoQ annualised", transform: qoq_annualised}
+      - {fred_id: CLV10MNACB1GQSCAEA20Q, label: "Year-over-year", transform: yoy}
