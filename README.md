@@ -144,42 +144,78 @@ payrolls get revised, and the diff on those CSVs is a free record of it.
 ## Charts
 
 <!-- CHARTS:START -->
-_Last rebuilt 29 July 2026, 09:20 UTC._
+_Last rebuilt 30 July 2026, 12:26 UTC._
 
-### US CPI
+## United States
+
+### US inflation, measured two ways
 `Headline CPI` — latest **3.7** (Jun 2026)
 
-![US CPI](charts/cpi_inflation.png)
+![US inflation, measured two ways](charts/cpi_inflation.png)
 
-### US PCE
+### The gauge the Fed actually targets
 `Headline PCE` — latest **4.1** (May 2026)
 
-![US PCE](charts/pce_inflation.png)
+![The gauge the Fed actually targets](charts/pce_inflation.png)
 
-### CPI Momentum
+### Recent momentum runs ahead of the annual rate
 `YoY` — latest **2.8** (Jun 2026)
 
-![CPI Momentum](charts/cpi_momentum.png)
+![Recent momentum runs ahead of the annual rate](charts/cpi_momentum.png)
 
-### US Unemployement Rate
+### Unemployment, the slowest of the fast indicators
 `Unemployment rate` — latest **4.2** (Jun 2026)
 
-![US Unemployement Rate](charts/labour_market.png)
+![Unemployment, the slowest of the fast indicators](charts/labour_market.png)
 
-### FED Rate vs Inflation
+### The policy rate against the inflation it is chasing
 `Fed funds rate` — latest **3.6** (Jun 2026)
 
-![FED Rate vs Inflation](charts/policy_vs_inflation.png)
+![The policy rate against the inflation it is chasing](charts/policy_vs_inflation.png)
 
-### US Money supply growth, nominal and real
+### Money supply growth, nominal and real
 `M2 (nominal)` — latest **5.5** (Jun 2026)
 
-![US Money supply growth, nominal and real](charts/money_supply.png)
+![Money supply growth, nominal and real](charts/money_supply.png)
 
-### US GDP Growth
+### US growth, measured fast and measured slow
 `QoQ annualised` — latest **2.1** (Jan 2026)
 
-![US GDP Growth](charts/gdp_growth.png)
+![US growth, measured fast and measured slow](charts/gdp_growth.png)
+
+## Switzerland
+
+### Swiss inflation, the outlier of the rich world
+`Swiss HICP` — latest **0.7** (Jun 2026)
+
+![Swiss inflation, the outlier of the rich world](charts/ch_inflation.png)
+
+### Swiss unemployment
+`Unemployment rate` — latest **5.1** (Jan 2026)
+
+![Swiss unemployment](charts/ch_unemployment.png)
+
+### Swiss growth
+`QoQ annualised` — latest **2.6** (Jan 2026)
+
+![Swiss growth](charts/ch_gdp.png)
+
+## Euro area
+
+### Euro area inflation
+`Euro area HICP` — latest **2.8** (Jun 2026)
+
+![Euro area inflation](charts/ea_inflation.png)
+
+### Euro area unemployment
+`Unemployment rate` — latest **6.6** (Oct 2022)
+
+![Euro area unemployment](charts/ea_unemployment.png)
+
+### Euro area growth
+`QoQ annualised` — latest **1.8** (Apr 2026)
+
+![Euro area growth](charts/ea_gdp.png)
 
 <!-- CHARTS:END -->
 
