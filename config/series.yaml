@@ -51,8 +51,8 @@ charts:
     subtitle: "Initial jobless claims, weekly, seasonally adjusted"
     ylabel: "Claims"
     transform: level
-    start: "2021-01-01"
-    note: "Starts 2021 — the 2020 spike to 6m would flatten everything else"
+    start: "2022-01-01"
+    note: "Starts 2022 — the 2020 spike to 6m would flatten everything else"
     series:
       - {fred_id: ICSA, label: "Initial claims"}
 
