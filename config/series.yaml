@@ -1,188 +1,150 @@
-# Every chart in the repo is defined here. To add one, copy a block and change
-# the FRED series IDs. Find IDs at https://fred.stlouisfed.org/ or from Python:
-#   python -c "from fredmacro.fred import search; print(search('core pce'))"
-#
-# INDENTATION MATTERS. Each chart starts with two spaces, then a dash.
-# Its settings sit at four spaces. Items under `series:` sit at six spaces.
-#
-# `section:` groups charts in the README. Sections appear in the order they
-# first appear below, so moving a block moves it in the README too.
-#
-# NOTE ON RECESSION SHADING: the grey bands come from USREC, the NBER's dating
-# of *US* recessions. They are switched off on the Swiss and euro area charts,
-# because marking US recessions on a Swiss GDP chart would be wrong.
+"""Chart construction: one function that turns a dict of series into a PNG."""
 
-defaults:
-  start: "1995-01-01"
-  shade_recessions: true
+from __future__ import annotations
 
-charts:
+from pathlib import Path
 
-  # ======================================================================
-  # UNITED STATES
-  # ======================================================================
+import matplotlib.dates as mdates
+import matplotlib.pyplot as plt
+import pandas as pd
 
-  - id: cpi_inflation
-    section: United States
-    title: "US inflation, measured two ways"
-    subtitle: "Consumer price index, year-over-year % change"
-    ylabel: "% YoY"
-    transform: yoy
-    zero_line: true
-    note: "Core excludes food and energy"
-    series:
-      - {fred_id: CPIAUCSL, label: "Headline CPI"}
-      - {fred_id: CPILFESL, label: "Core CPI"}
+from .fred import get_series
+from .style import MUTED, PALETTE, RECESSION, add_footer, add_titles
 
-  - id: pce_inflation
-    section: United States
-    title: "The gauge the Fed actually targets"
-    subtitle: "Personal consumption expenditures price index, year-over-year % change"
-    ylabel: "% YoY"
-    transform: yoy
-    zero_line: true
-    hline: 2.0
-    hline_label: "FOMC 2% target"
-    note: "The 2% target is defined on headline PCE, not CPI"
-    series:
-      - {fred_id: PCEPI, label: "Headline PCE"}
-      - {fred_id: PCEPILFE, label: "Core PCE"}
+_recession_cache: pd.Series | None = None
 
-  - id: cpi_momentum
-    section: United States
-    title: "Recent momentum runs ahead of the annual rate"
-    subtitle: "Core CPI, year-over-year vs three-month annualised % change"
-    ylabel: "%"
-    transform: yoy
-    start: "2015-01-01"
-    zero_line: true
-    series:
-      - {fred_id: CPILFESL, label: "YoY", transform: yoy}
-      - {fred_id: CPILFESL, label: "3m annualised", transform: three_month_annualised}
 
-  - id: labour_market
-    section: United States
-    title: "Unemployment, the slowest of the fast indicators"
-    subtitle: "Civilian unemployment rate, % of labour force"
-    ylabel: "%"
-    transform: level
-    series:
-      - {fred_id: UNRATE, label: "Unemployment rate"}
+def recession_periods(start: str = "1948-01-01") -> list[tuple[pd.Timestamp, pd.Timestamp]]:
+    """NBER recession dates, as start/end pairs, from FRED series USREC.
 
-  - id: policy_vs_inflation
-    section: United States
-    title: "The policy rate against the inflation it is chasing"
-    subtitle: "Effective federal funds rate and core PCE inflation, %"
-    ylabel: "%"
-    start: "2000-01-01"
-    transform: level
-    series:
-      - {fred_id: FEDFUNDS, label: "Fed funds rate", transform: level}
-      - {fred_id: PCEPILFE, label: "Core PCE (YoY)", transform: yoy}
+    USREC is a monthly 0/1 dummy. We convert runs of 1s into shaded spans.
+    """
+    global _recession_cache
+    if _recession_cache is None:
+        _recession_cache = get_series("USREC", start=start)
+    flag = _recession_cache
+    spans, run_start = [], None
+    for date, value in flag.items():
+        if value == 1 and run_start is None:
+            run_start = date
+        elif value == 0 and run_start is not None:
+            spans.append((run_start, date))
+            run_start = None
+    if run_start is not None:
+        spans.append((run_start, flag.index[-1]))
+    return spans
 
-  - id: money_supply
-    section: United States
-    title: "Money supply growth, nominal and real"
-    subtitle: "M2 money stock, year-over-year % change"
-    ylabel: "% YoY"
-    transform: yoy
-    zero_line: true
-    note: "Real M2 is M2 deflated by CPI. M1, not M2, has the May 2020 definitional break"
-    series:
-      - {fred_id: M2SL, label: "M2 (nominal)"}
-      - {fred_id: M2REAL, label: "M2 (real)"}
 
-  - id: gdp_growth
-    section: United States
-    title: "US growth, measured fast and measured slow"
-    subtitle: "Real GDP, quarter-on-quarter annualised vs year-over-year % change"
-    ylabel: "%"
-    start: "2000-01-01"
-    zero_line: true
-    note: "2020 quarters dominate the vertical scale"
-    series:
-      - {fred_id: GDPC1, label: "QoQ annualised", transform: qoq_annualised}
-      - {fred_id: GDPC1, label: "Year-over-year", transform: yoy}
+def _place_end_labels(ax, entries: list[tuple[str, pd.Series, str]]) -> None:
+    """Draw the marker + label at the end of each line, nudging labels apart
+    vertically when two series finish close together so text never overlaps.
+    """
+    if not entries:
+        return
 
-  # ======================================================================
-  # SWITZERLAND
-  # ======================================================================
+    ymin, ymax = ax.get_ylim()
+    # Minimum vertical gap between label centres, in data units. ~9% of the
+    # visible range reads as "two separate rows of text" without excess space.
+    min_gap = (ymax - ymin) * 0.09
 
-  - id: ch_inflation
-    section: Switzerland
-    title: "Swiss inflation, the outlier of the rich world"
-    subtitle: "Harmonised index of consumer prices, year-over-year % change"
-    ylabel: "% YoY"
-    transform: yoy
-    start: "2006-01-01"
-    zero_line: true
-    shade_recessions: false
-    note: "HICP, the EU-comparable measure. The SNB targets the national LIK, which differs slightly"
-    series:
-      - {fred_id: CP0000CHM086NEST, label: "Swiss HICP"}
+    items = sorted(
+        [
+            {"label": label, "x": s.index[-1], "y": s.iloc[-1], "colour": colour}
+            for label, s, colour in entries
+        ],
+        key=lambda d: d["y"],
+    )
+    # Text is aligned to the right-most series so the labels form a tidy column,
+    # but each marker stays on its own line's true final point. This matters when
+    # a chart mixes frequencies — a daily series ends weeks after a monthly one.
+    x_text = max(item["x"] for item in items)
 
-  - id: ch_unemployment
-    section: Switzerland
-    title: "Swiss unemployment"
-    subtitle: "Unemployment rate, 15 and over, % of labour force"
-    ylabel: "%"
-    transform: level
-    start: "2000-01-01"
-    shade_recessions: false
-    note: "OECD/ILO definition. SECO's registered-unemployed measure runs 1-2pp lower"
-    series:
-      - {fred_id: LRUNTTTTCHQ156S, label: "Unemployment rate"}
+    for item in items:
+        item["y_label"] = item["y"]
+    for i in range(1, len(items)):
+        floor = items[i - 1]["y_label"] + min_gap
+        if items[i]["y_label"] < floor:
+            items[i]["y_label"] = floor
 
-  - id: ch_gdp
-    section: Switzerland
-    title: "Swiss growth"
-    subtitle: "Real GDP, quarter-on-quarter annualised vs year-over-year % change"
-    ylabel: "%"
-    start: "2000-01-01"
-    zero_line: true
-    shade_recessions: false
-    series:
-      - {fred_id: CLVMNACSCAB1GQCH, label: "QoQ annualised", transform: qoq_annualised}
-      - {fred_id: CLVMNACSCAB1GQCH, label: "Year-over-year", transform: yoy}
+    for item in items:
+        colour, x_true, y_true = item["colour"], item["x"], item["y"]
+        ax.plot([x_true], [y_true], marker="o", markersize=4.5, color=colour, zorder=5)
+        ax.annotate(
+            f"{item['label']}\n{y_true:,.1f}",
+            xy=(x_true, y_true),
+            xytext=(x_text, item["y_label"]),
+            textcoords="data",
+            va="center",
+            ha="left",
+            fontsize=10,
+            color=colour,
+            fontweight="semibold",
+            linespacing=1.4,
+        )
 
-  # ======================================================================
-  # EURO AREA
-  # ======================================================================
 
-  - id: ea_inflation
-    section: Euro area
-    title: "Euro area inflation"
-    subtitle: "Harmonised index of consumer prices, year-over-year % change"
-    ylabel: "% YoY"
-    transform: yoy
-    start: "1997-01-01"
-    zero_line: true
-    shade_recessions: false
-    hline: 2.0
-    hline_label: "ECB 2% target"
-    note: "Changing composition: EA11 from 1999 through EA20 from 2023"
-    series:
-      - {fred_id: CP0000EZCCM086NEST, label: "Euro area HICP"}
+def line_chart(
+    series: dict[str, pd.Series],
+    title: str,
+    subtitle: str | None = None,
+    ylabel: str | None = None,
+    source: str = "FRED, Federal Reserve Bank of St. Louis",
+    note: str | None = None,
+    hline: float | None = None,
+    hline_label: str | None = None,
+    zero_line: bool = False,
+    shade_recessions: bool = True,
+    outpath: str | Path | None = None,
+):
+    """Draw one chart. `series` maps display label -> pandas Series."""
+    fig, ax = plt.subplots()
 
-  - id: ea_unemployment
-    section: Euro area
-    title: "Euro area unemployment"
-    subtitle: "Unemployment rate, 15 and over, % of labour force"
-    ylabel: "%"
-    transform: level
-    start: "2000-01-01"
-    shade_recessions: false
-    series:
-      - {fred_id: LRUNTTTTEZQ156S, label: "Unemployment rate"}
+    if shade_recessions:
+        earliest = min(s.index[0] for s in series.values())
+        for span_start, span_end in recession_periods():
+            if span_end >= earliest:
+                ax.axvspan(max(span_start, earliest), span_end,
+                           color=RECESSION, alpha=0.06, linewidth=0, zorder=0)
 
-  - id: ea_gdp
-    section: Euro area
-    title: "Euro area growth"
-    subtitle: "Real GDP, quarter-on-quarter annualised vs year-over-year % change"
-    ylabel: "%"
-    start: "2000-01-01"
-    zero_line: true
-    shade_recessions: false
-    series:
-      - {fred_id: CLV10MNACB1GQSCAEA20Q, label: "QoQ annualised", transform: qoq_annualised}
-      - {fred_id: CLV10MNACB1GQSCAEA20Q, label: "Year-over-year", transform: yoy}
+    if zero_line:
+        ax.axhline(0, color=MUTED, linewidth=1.0, alpha=0.6, zorder=1)
+
+    if hline is not None:
+        ax.axhline(hline, color=MUTED, linewidth=1.2, linestyle=(0, (4, 3)), zorder=1)
+        if hline_label:
+            ax.annotate(hline_label, xy=(0.005, hline), xycoords=("axes fraction", "data"),
+                        xytext=(0, 5), textcoords="offset points",
+                        fontsize=9, color=MUTED)
+
+    label_entries = []
+    for i, (label, s) in enumerate(series.items()):
+        colour = PALETTE[i % len(PALETTE)]
+        ax.plot(s.index, s.values, color=colour, zorder=3,
+                linewidth=1.6 if i == 0 else 1.3)
+        label_entries.append((label, s, colour))
+
+    # Leave room on the right for the direct labels.
+    ax.margins(x=0.02)
+    xmin, xmax = ax.get_xlim()
+    ax.set_xlim(xmin, xmax + (xmax - xmin) * 0.16)
+
+    # Labels are placed after xlim/ylim are finalised, so the collision-check
+    # math and the x-position of the label both line up with what's drawn.
+    _place_end_labels(ax, label_entries)
+
+    ax.xaxis.set_major_locator(mdates.AutoDateLocator(minticks=5, maxticks=9))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
+    if ylabel:
+        ax.set_ylabel(ylabel)
+
+    add_titles(ax, title, subtitle)
+    latest = max(s.index[-1] for s in series.values()).strftime("%b %Y")
+    add_footer(ax, source, note=f"Latest observation: {latest}"
+               + (f" · {note}" if note else ""))
+
+    if outpath:
+        outpath = Path(outpath)
+        outpath.parent.mkdir(parents=True, exist_ok=True)
+        fig.savefig(outpath)
+        plt.close(fig)
+    return fig, ax
