@@ -144,150 +144,150 @@ payrolls get revised, and the diff on those CSVs is a free record of it.
 ## Charts
 
 <!-- CHARTS:START -->
-_Last rebuilt 30 July 2026, 12:44 UTC._
+_Last rebuilt 30 July 2026, 12:48 UTC._
 
 ## 1. Leading indicators
 
-### The curve that has called every recession
+### US Yield Curve
 `10y minus 3m` — latest **0.8** (Jul 2026)
 
-![The curve that has called every recession](charts/yield_curve.png)
+![US Yield Curve](charts/yield_curve.png)
 
-### The fastest read on the labour market
+### US Initial Jobless Claims
 `Initial claims` — latest **197000.0** (Jul 2026)
 
-![The fastest read on the labour market](charts/jobless_claims.png)
+![US Initial Jobless Claims](charts/jobless_claims.png)
 
-### Housing leads the cycle, and permits lead housing
+### US Building Permits
 `Building permits` — latest **1374.0** (Jun 2026)
 
-![Housing leads the cycle, and permits lead housing](charts/building_permits.png)
+![US Building Permits](charts/building_permits.png)
 
 ## 2. Growth and activity
 
-### US growth, measured fast and measured slow
+### US GDP Growth
 `QoQ annualised` — latest **2.1** (Jan 2026)
 
-![US growth, measured fast and measured slow](charts/gdp_growth.png)
+![US GDP Growth](charts/gdp_growth.png)
 
 ## 3. Labour market
 
-### Unemployment, the slowest of the fast indicators
+### US Unemployment Rate
 `Unemployment rate` — latest **4.2** (Jun 2026)
 
-![Unemployment, the slowest of the fast indicators](charts/labour_market.png)
+![US Unemployment Rate](charts/labour_market.png)
 
 ## 4. Inflation - realised
 
-### US inflation, measured two ways
+### US CPI
 `Headline CPI` — latest **3.7** (Jun 2026)
 
-![US inflation, measured two ways](charts/cpi_inflation.png)
+![US CPI](charts/cpi_inflation.png)
 
-### The gauge the Fed actually targets
+### US PCE
 `Headline PCE` — latest **4.1** (May 2026)
 
-![The gauge the Fed actually targets](charts/pce_inflation.png)
+![US PCE](charts/pce_inflation.png)
 
-### Recent momentum runs ahead of the annual rate
+### US Core CPI Momentum
 `YoY` — latest **2.8** (Jun 2026)
 
-![Recent momentum runs ahead of the annual rate](charts/cpi_momentum.png)
+![US Core CPI Momentum](charts/cpi_momentum.png)
 
 ## 5. Inflation - expected
 
-### What the bond market expects
+### US Inflation Expectations
 `10y breakeven` — latest **2.3** (Jul 2026)
 
-![What the bond market expects](charts/inflation_expectations.png)
+![US Inflation Expectations](charts/inflation_expectations.png)
 
-### Priced against delivered
+### US Breakevens vs Realised CPI
 `10y breakeven` — latest **2.3** (Jul 2026)
 
-![Priced against delivered](charts/expected_vs_realised.png)
+![US Breakevens vs Realised CPI](charts/expected_vs_realised.png)
 
 ## 6. Rates and policy
 
-### The policy rate against the inflation it is chasing
+### US Policy Rate vs Core PCE
 `Fed funds rate` — latest **3.6** (Jun 2026)
 
-![The policy rate against the inflation it is chasing](charts/policy_vs_inflation.png)
+![US Policy Rate vs Core PCE](charts/policy_vs_inflation.png)
 
-### The two tenors that matter most
+### US Treasury Yields
 `10-year` — latest **4.6** (Jul 2026)
 
-![The two tenors that matter most](charts/treasury_yields.png)
+![US Treasury Yields](charts/treasury_yields.png)
 
-### The discount rate that actually matters
+### US Real vs Nominal 10-Year Yield
 `Nominal 10y` — latest **4.6** (Jul 2026)
 
-![The discount rate that actually matters](charts/real_yields.png)
+![US Real vs Nominal 10-Year Yield](charts/real_yields.png)
 
 ## 7. Financial conditions
 
-### Credit usually cracks before equities do
+### US Credit Spreads
 `High yield` — latest **2.8** (Jul 2026)
 
-![Credit usually cracks before equities do](charts/credit_spreads.png)
+![US Credit Spreads](charts/credit_spreads.png)
 
-### The dollar, which prices everything else
+### US Dollar Index
 `Broad dollar` — latest **120.7** (Jul 2026)
 
-![The dollar, which prices everything else](charts/dollar.png)
+![US Dollar Index](charts/dollar.png)
 
-### The size of the Fed's footprint
+### Fed Balance Sheet
 `Fed total assets` — latest **6747378.0** (Jul 2026)
 
-![The size of the Fed's footprint](charts/fed_balance_sheet.png)
+![Fed Balance Sheet](charts/fed_balance_sheet.png)
 
-### The liquidity buffer draining away
+### Fed Overnight Reverse Repo
 `ON RRP` — latest **2.6** (Jul 2026)
 
-![The liquidity buffer draining away](charts/reverse_repo.png)
+![Fed Overnight Reverse Repo](charts/reverse_repo.png)
 
-### Money supply growth, nominal and real
+### US Money Supply (M2)
 `M2 (nominal)` — latest **5.5** (Jun 2026)
 
-![Money supply growth, nominal and real](charts/money_supply.png)
+![US Money Supply (M2)](charts/money_supply.png)
 
 ## 8. Switzerland
 
-### Swiss inflation, the outlier of the rich world
+### Swiss CPI
 `Swiss HICP` — latest **0.7** (Jun 2026)
 
-![Swiss inflation, the outlier of the rich world](charts/ch_inflation.png)
+![Swiss CPI](charts/ch_inflation.png)
 
-### Swiss unemployment
+### Swiss Unemployment Rate
 `Unemployment rate` — latest **5.1** (Jan 2026)
 
-![Swiss unemployment](charts/ch_unemployment.png)
+![Swiss Unemployment Rate](charts/ch_unemployment.png)
 
-### Swiss growth
+### Swiss GDP Growth
 `QoQ annualised` — latest **2.6** (Jan 2026)
 
-![Swiss growth](charts/ch_gdp.png)
+![Swiss GDP Growth](charts/ch_gdp.png)
 
-### The franc, permanent headwind and permanent haven
+### CHF/USD Exchange Rate
 `CHF per USD` — latest **0.8** (Jul 2026)
 
-![The franc, permanent headwind and permanent haven](charts/chf_usd.png)
+![CHF/USD Exchange Rate](charts/chf_usd.png)
 
 ## 9. Euro area
 
-### Euro area inflation
+### Euro Area CPI
 `Euro area HICP` — latest **2.8** (Jun 2026)
 
-![Euro area inflation](charts/ea_inflation.png)
+![Euro Area CPI](charts/ea_inflation.png)
 
-### Euro area unemployment
+### Euro Area Unemployment Rate
 `Unemployment rate` — latest **6.6** (Oct 2022)
 
-![Euro area unemployment](charts/ea_unemployment.png)
+![Euro Area Unemployment Rate](charts/ea_unemployment.png)
 
-### Euro area growth
+### Euro Area GDP Growth
 `QoQ annualised` — latest **1.8** (Apr 2026)
 
-![Euro area growth](charts/ea_gdp.png)
+![Euro Area GDP Growth](charts/ea_gdp.png)
 
 <!-- CHARTS:END -->
 
